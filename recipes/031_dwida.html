@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dwida – Four-Language Recipe</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bona+Nova:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Heebo:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================
+   FOUR-LANGUAGE COOKBOOK STYLES
+   ============================================ */
+
+:root {
+  --bg-page: #faf6f1;
+  --bg-body: #e0dfda;
+  --ink: #222222;
+  --muted: #777777;
+  --accent: #d9925b;
+  --accent-soft: #f3d7b4;
+  --font-english: "Sora", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-spanish: "Fraunces", Georgia, serif;
+  --font-hebrew: "Heebo", system-ui, sans-serif;
+  --font-arabic: "Noto Naskh Arabic", system-ui, sans-serif;
+  --font-title: "Bona Nova", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+  background: var(--bg-body);
+  font-family: var(--font-english);
+  color: var(--ink);
+}
+
+/* ============================================
+   BOOK / PAGE STRUCTURE
+   ============================================ */
+
+.book {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.page {
+  position: relative;
+  width: 8in;
+  height: 8in;
+  background: var(--bg-page);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.24);
+  overflow: hidden;
+  page-break-after: always;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.page-inner {
+  padding: 0.4in 0.5in;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.page--image .page-inner {
+  padding: 0;
+}
+
+.page-num {
+  position: absolute;
+  bottom: 0.3in;
+  right: 0.35in;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================
+   RTL / LTR LANGUAGE HELPERS
+   ============================================ */
+
+.lang-he {
+  direction: rtl;
+  text-align: right;
+  font-family: var(--font-hebrew);
+}
+
+.lang-ar {
+  direction: rtl;
+  text-align: right;
+  font-family: var(--font-arabic);
+}
+
+.lang-es {
+  direction: ltr;
+  text-align: left;
+  font-family: var(--font-spanish);
+}
+
+.lang-en {
+  direction: ltr;
+  text-align: left;
+  font-family: var(--font-english);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+p {
+  margin: 0 0 0.35em;
+  line-height: 1.5;
+  font-size: 0.85rem;
+}
+
+h2 {
+  margin: 0 0 0.2in;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================
+   PAGE 1: TITLE + DESCRIPTION
+   ============================================ */
+
+.title-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.15in;
+  margin-bottom: 0.35in;
+  width: 100%;
+}
+
+/* Title grid with centered chapter number */
+.title-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 0.1in 0.15in;
+  margin-bottom: 0.25in;
+  width: 100%;
+  position: relative;
+}
+
+/* Position titles in the grid:
+   Row 1: ES (left), HE (right)
+   Row 2: Chapter number (centered, spanning both columns)
+   Row 3: EN (left), AR (right)
+*/
+.title-grid > .title-word:nth-child(1) { grid-area: 1 / 1; }  /* ES */
+.title-grid > .title-word:nth-child(2) { grid-area: 1 / 2; }  /* HE */
+.title-grid > .chapter-number         { grid-area: 2 / 1 / 2 / 3; }  /* Centered */
+.title-grid > .title-word:nth-child(4) { grid-area: 3 / 1; }  /* EN */
+.title-grid > .title-word:nth-child(5) { grid-area: 3 / 2; }  /* AR */
+
+/* Oriental-styled chapter number */
+.chapter-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.08in 0;
+  position: relative;
+}
+
+.chapter-number span {
+  font-family: var(--font-title);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  position: relative;
+  padding: 0.1in 0.4in;
+  letter-spacing: 0.1em;
+}
+
+/* Decorative oriental frame around number */
+.chapter-number span::before,
+.chapter-number span::after {
+  content: "✦";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  color: var(--accent-soft);
+  opacity: 0.8;
+}
+
+.chapter-number span::before {
+  left: 0;
+}
+
+.chapter-number span::after {
+  right: 0;
+}
+
+/* Decorative lines extending from the number */
+.chapter-number::before,
+.chapter-number::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to var(--direction, right),
+    var(--accent-soft) 0%,
+    transparent 100%
+  );
+  opacity: 0.6;
+  margin: 0 0.2in;
+}
+
+.chapter-number::before {
+  --direction: right;
+}
+
+.chapter-number::after {
+  --direction: left;
+}
+
+.title-word {
+  font-family: var(--font-title);
+  font-size: 2.6rem;
+  font-weight: 700;
+  padding: 0.1in 0.15in;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  min-height: 0.8in;
+  position: relative;
+  background: transparent;
+  box-sizing: border-box;
+  text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.6),
+               -1px -1px 0 rgba(0, 0, 0, 0.15),
+               3px 3px 12px rgba(217, 146, 91, 0.2);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))
+          brightness(1.02)
+          contrast(1.05)
+          saturate(1.1);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* LTR titles (Spanish, English) - align left */
+.title-word.lang-es,
+.title-word.lang-en {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* RTL titles (Hebrew, Arabic) - align right */
+.title-word.lang-he,
+.title-word.lang-ar {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.title-word::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, 
+              transparent 0%, 
+              rgba(255, 255, 255, 0.02) 50%, 
+              transparent 100%);
+  pointer-events: none;
+  opacity: 0.4;
+  border-radius: 50%;
+}
+
+.title-word::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: radial-gradient(ellipse at 30% 40%, 
+              rgba(217, 146, 91, 0.04) 0%, 
+              transparent 70%);
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  border-radius: 50%;
+}
+
+.title-word:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2))
+          brightness(1.05)
+          contrast(1.1)
+          saturate(1.15);
+}
+
+.title-word span {
+  color: var(--ink);
+  text-align: center;
+  width: 100%;
+  display: block;
+}
+
+.title-word.lang-he,
+.title-word.lang-ar {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.title-word.lang-es {
+  text-transform: capitalize;
+}
+
+/* ============================================
+   TITLE FONT SIZE TIERS
+   ============================================ */
+
+.title-word.title-large {
+  font-size: 2.8rem;
+}
+
+.title-word.title-medium {
+  font-size: 2.2rem;
+}
+
+.title-word.title-small {
+  font-size: 1.7rem;
+}
+
+/* ============================================
+   DESCRIPTION SECTION
+   ============================================ */
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15in;
+}
+
+.info-item {
+  text-align: center;
+  font-size: 0.85rem;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.info-item p {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.section {
+  margin-bottom: 0.45in;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.2in;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+/* ============================================
+   PAGE 2: FULL IMAGE
+   ============================================ */
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============================================
+   PAGE 3 + 4: TWO-COLUMN LAYOUT
+   Using absolute positioning for reliable print rendering
+   ============================================ */
+
+.two-col {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+/* LEFT COLUMN (LTR: Spanish/English) - starts 15% from top, wider outer margin */
+.two-col > .column:first-child {
+  position: absolute;
+  top: 15%;
+  left: 0;
+  width: 50%;
+  height: 85%;
+  box-sizing: border-box;
+  padding: 0 0.12in 0 0.35in;  /* 0.35in outer margin (left edge), 0.12in toward center */
+}
+
+/* RIGHT COLUMN (RTL: Hebrew/Arabic) - starts 38% from top to clear illustrations */
+.two-col > .column:nth-child(2) {
+  position: absolute;
+  top: 38%;
+  right: 0;
+  width: 50%;
+  height: 62%;
+  box-sizing: border-box;
+  padding: 0 0.35in 0 0.12in;  /* 0.35in outer margin (right edge), 0.12in toward center */
+}
+
+/* Vertical divider */
+.two-col::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 0.5px;
+  background-color: var(--accent-soft);
+  opacity: 0.5;
+  transform: translateX(-50%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ============================================
+   CORNER INGREDIENT DECORATIONS
+   ============================================ */
+
+.corner-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.corner-ingredient {
+  position: absolute;
+  width: 2.0in;
+  height: 2.0in;
+  object-fit: contain;
+  opacity: 0.35;
+  filter: saturate(0.75) brightness(1.05);
+  pointer-events: none;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08in;
+  overflow: hidden;
+  justify-content: flex-start;
+  align-items: stretch;
+  z-index: 1;
+}
+
+/* All columns get symmetric padding */
+
+.column > div {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  gap: 0.08in;
+}
+
+.section-label {
+  font-size: 0.7em;  /* Relative to parent's adaptive font-size */
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.03in;
+  text-align: center;
+}
+
+.ingredients-list,
+.steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  /* Font size and line-height now set via adaptive inline styles */
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.ingredients-list li + li {
+  margin-top: 0.03em;
+}
+
+.step {
+  margin-bottom: 0.1em;
+}
+
+.step-num {
+  font-weight: 600;
+  margin-right: 0.25em;
+}
+
+.lang-he .step-num,
+.lang-ar .step-num {
+  margin-right: 0;
+  margin-left: 0.25em;
+}
+
+.variant-label {
+  margin-top: 0.1in;
+  margin-bottom: 0.04in;
+  font-size: 0.9em;  /* Relative to parent's adaptive font-size */
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ============================================
+   COMPACT/TIGHT CLASSES FOR OVERFLOW
+   ============================================ */
+
+/* Compact/tight classes removed - using adaptive inline styles instead */
+
+/* ============================================
+   METADATA ROW
+   ============================================ */
+
+.meta-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 0.2in;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 0.3in;
+  align-items: center;
+}
+
+.meta-row.meta-footer {
+  position: absolute;
+  bottom: 0.4in;
+  left: 0.6in;
+  right: 0.6in;
+  margin-bottom: 0;
+  z-index: 10;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  text-align: center;
+}
+
+.meta-label {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.meta-value {
+  color: var(--ink);
+  margin-top: 0.04in;
+  text-align: center;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  body {
+    background: #ffffff;
+    padding: 0;
+  }
+
+  .book {
+    display: block;
+  }
+
+  .page {
+    box-shadow: none;
+    margin: 0;
+    page-break-after: always;
+    overflow: hidden;  /* Keep content within page bounds */
+  }
+
+  .title-word:hover {
+    transform: none;
+  }
+
+  @page {
+    size: 8in 8in;
+    margin: 0;
+  }
+
+  .two-col {
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .two-col > .column:first-child {
+    position: absolute;
+    left: 0;
+    width: 50%;
+  }
+
+  .two-col > .column:nth-child(2) {
+    position: absolute;
+    right: 0;
+    width: 50%;
+  }
+
+  .column {
+    overflow: hidden;
+  }
+}
+
+/* ============================================
+   FRONT MATTER PAGES
+   ============================================ */
+
+/* Title Page */
+.page--title {
+  background: var(--bg-page);
+  position: relative;
+}
+
+/* Ingredient Background Layer */
+.title-ingredients-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.title-ingredient {
+  position: absolute;
+  object-fit: contain;
+  opacity: 0.15;
+  filter: saturate(0.4) brightness(1.1);
+  pointer-events: none;
+}
+
+.title-page-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.title-page-content {
+  text-align: center;
+  padding: 0.4in;
+  width: 100%;
+}
+
+.book-titles {
+  margin-bottom: 0.3in;
+}
+
+.book-title-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5in;
+  margin-bottom: 0.1in;
+}
+
+.book-title {
+  font-family: var(--font-title);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.book-title-he {
+  font-family: var(--font-hebrew);
+  direction: rtl;
+}
+
+.book-title-ar {
+  font-family: var(--font-arabic);
+  direction: rtl;
+}
+
+.book-title-en,
+.book-title-es {
+  font-family: var(--font-title);
+  letter-spacing: 0.03em;
+}
+
+.book-subtitle-block {
+  margin-bottom: 0.15in;
+}
+
+.book-subtitle {
+  font-family: var(--font-english);
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-bottom: 0.04in;
+  letter-spacing: 0.05em;
+}
+
+.book-subtitle.book-subtitle-he {
+  font-family: var(--font-hebrew);
+  direction: rtl;
+}
+
+.book-subtitle.book-subtitle-ar {
+  font-family: var(--font-arabic);
+  direction: rtl;
+}
+
+.title-divider {
+  width: 2in;
+  height: 2px;
+  background: var(--accent);
+  margin: 0.25in auto;
+}
+
+.family-lines {
+  margin-bottom: 0.2in;
+}
+
+.family-line {
+  font-family: var(--font-english);
+  font-size: 0.95rem;
+  color: var(--ink);
+  margin-bottom: 0.03in;
+}
+
+.family-origin {
+  font-family: var(--font-english);
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+}
+
+.authors {
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+/* Copyright Page */
+.page--copyright {
+  background: var(--bg-page);
+}
+
+.copyright-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.copyright-content {
+  text-align: center;
+  width: 100%;
+}
+
+.copyright-text {
+  font-family: var(--font-english);
+  font-size: 0.85rem;
+  color: var(--ink);
+  margin-bottom: 0.1in;
+  text-align: center;
+}
+
+.copyright-edition {
+  font-size: 0.8rem;
+  margin-top: 0.15in;
+}
+
+.copyright-divider {
+  width: 1.5in;
+  height: 1px;
+  background: var(--accent-soft);
+  margin: 0.25in auto;
+}
+
+.copyright-note {
+  font-family: var(--font-english);
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 0.06in;
+  text-align: center;
+}
+
+.copyright-note-ar {
+  font-family: var(--font-arabic);
+  direction: rtl;
+}
+
+/* Introduction Page */
+.page--intro {
+  background: var(--bg-page);
+}
+
+.intro-inner {
+  padding: 0.4in 0.5in;
+}
+
+.intro-title {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 0.25in;
+  letter-spacing: 0.05em;
+}
+
+.intro-columns {
+  display: flex;
+  gap: 0.4in;
+  height: calc(100% - 0.8in);
+}
+
+.intro-col {
+  flex: 1;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.intro-col p {
+  margin-bottom: 0.12in;
+}
+
+.intro-col p:first-child {
+  margin-top: 0;
+}
+
+.intro-text-he {
+  font-family: var(--font-hebrew);
+  direction: rtl;
+  text-align: right;
+}
+
+.intro-text-en {
+  font-family: var(--font-english);
+  text-align: justify;
+}
+
+.intro-text-es {
+  font-family: var(--font-english);
+  text-align: justify;
+}
+
+.intro-text-ar {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  text-align: right;
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+/* Blank Page */
+.page--blank {
+  background: var(--bg-page);
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="book">
+
+  <!-- PAGE 1: NAME + DESCRIPTION (Chapter 23) -->
+  <section class="page">
+    <div class="page-inner">
+
+      <div class="title-grid">
+        <div class="title-word lang-es title-large"><span>Dwida</span></div>
+        <div class="title-word lang-he title-medium"><span>דווידה</span></div>
+        <div class="chapter-number"><span>23</span></div>
+        <div class="title-word lang-en title-large"><span>Dwida</span></div>
+        <div class="title-word lang-ar title-large"><span>دويدة</span></div>
+      </div>
+
+      <div class="section">
+        <div class="info-grid">
+          <div class="info-item lang-he">
+            <p>דווידה היא מרק פסטה מנחם על בסיס עגבניות, הדומה למחמסה אך מוכן עם אטריות דקות או ספגטי שבור. השם נגזר מהמילה הערבית &#x27;דווידה&#x27; (תולעת קטנה), המתייחסת לצורת האטריות. מנה פשוטה זו נהוגה בקהילות צפון אפריקה, ולעיתים קרובות מוגשת לשבירת הצום.</p>
+          </div>
+          <div class="info-item lang-es">
+            <p>La Dwida es una reconfortante sopa de pasta a base de tomate, similar a la Mhamsa pero hecha con fideos finos o espaguetis rotos. El nombre deriva del árabe &#x27;Duwayda&#x27; (gusanito), refiriéndose a la forma de la pasta. Este plato sencillo se sirve tradicionalmente para romper el ayuno en las comunidades judías del norte de África.</p>
+          </div>
+          <div class="info-item lang-ar">
+            <p>الدويدة هي جاري (حساء) بالمقرونة رقيقة أو الشعيرية، تشبه المحمصة ولكن بنوع مختلف من العجين. الاسم مشتق من &#x27;دويدة&#x27; (تصغير دودة) إشارة لشكل المعجنات. هذه الأكلة الساخنة والبسيطة معروفة عند اليهود في شمال إفريقيا وغالباً ما تقدم لكسر الصيام.</p>
+          </div>
+          <div class="info-item lang-en">
+            <p>Dwida is a comforting tomato-based pasta soup, similar to Mhamsa but made with thin noodles or broken spaghetti. The name derives from the Arabic &#x27;Duwayda&#x27; (little worm), referring to the pasta shape. This simple, warming dish is traditionally served to break fasts in North African Jewish communities.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="meta-row meta-footer">
+        <div class="meta-item">
+          <span class="meta-label">Servings</span>
+          <span class="meta-value">3–4</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Prep time</span>
+          <span class="meta-value">10 min</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Cook time</span>
+          <span class="meta-value">20 min</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Difficulty</span>
+          <span class="meta-value">Easy</span>
+        </div>
+      </div>
+
+      <div class="page-num">1</div>
+    </div>
+  </section>
+
+
+  <!-- PAGE 2: FULL-BLEED IMAGE -->
+  <section class="page page--image">
+    <div class="page-inner">
+      <img class="hero-image" src="../images/031_dwida.png" alt="Dwida dish">
+      <div class="page-num">2</div>
+    </div>
+  </section>
+
+
+  <!-- PAGE 3: SPANISH (left) + HEBREW (right) -->
+  <section class="page">
+    <div class="page-inner">
+      <div class="corner-decorations">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/paprika_sweet_hot.png" 
+             alt="" 
+             style="left: 55.0%; top: 6.0%; transform: rotate(20deg) skewX(0deg) skewY(1deg) scale(0.9506609935758144);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/salt_table_coarse_kala_namak.png" 
+             alt="" 
+             style="left: 73.0%; top: 14.0%; transform: rotate(7deg) skewX(-6deg) skewY(-1deg) scale(0.9299953660758926);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/pasta_spaghetti_vermicelli.png" 
+             alt="" 
+             style="left: 88.0%; top: 4.0%; transform: rotate(10deg) skewX(-1deg) skewY(2deg) scale(1.0397111265850563);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/hot_peppers_chili.png" 
+             alt="" 
+             style="left: 4.0%; top: 72.0%; transform: rotate(-12deg) skewX(-3deg) skewY(-4deg) scale(1.1258457172794052);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/water.png" 
+             alt="" 
+             style="left: 20.0%; top: 82.0%; transform: rotate(-17deg) skewX(6deg) skewY(1deg) scale(1.0152747833521165);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/oil_vegetable_olive_canola.png" 
+             alt="" 
+             style="left: 8.0%; top: 92.0%; transform: rotate(-17deg) skewX(3deg) skewY(-3deg) scale(1.0125692194051785);">
+      </div>
+      <div class="two-col">
+        <div class="column lang-es" style="font-size: 0.730rem; line-height: 1.24;">
+          <div>
+            <div class="section-label">Ingredientes</div>
+            <ul class="ingredients-list">
+              <li>2 cucharadas de aceite</li>
+              <li>1 cucharada de pasta de tomate</li>
+              <li>1 tomate picado</li>
+              <li>1 pimiento picante (al gusto)</li>
+              <li>1 cucharada de pimentón dulce</li>
+              <li>Sal</li>
+              <li>1.5 litros de agua</li>
+              <li>250g de espaguetis finos (rotos) o fideos</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="section-label">Instrucciones</div>
+            <ul class="steps-list">
+              <li class="step"><span class="step-num">1.</span>Calentar aceite en una olla y sofreír la pasta de tomate, el tomate fresco, el pimiento picante y las especias.</li>
+              <li class="step"><span class="step-num">2.</span>Añadir el agua y llevar a ebullición.</li>
+              <li class="step"><span class="step-num">3.</span>Agregar los espaguetis rotos o fideos finos.</li>
+              <li class="step"><span class="step-num">4.</span>Cocinar unos 10 minutos hasta que la pasta esté tierna y la sopa espese ligeramente.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="column lang-he" style="font-size: 0.763rem; line-height: 1.27;">
+          <div>
+            <div class="section-label">מצרכים</div>
+            <ul class="ingredients-list">
+              <li>2 כפות שמן</li>
+              <li>1 כף רסק עגבניות</li>
+              <li>1 עגבניה קצוצה</li>
+              <li>1 פלפל חריף (או לפי הטעם)</li>
+              <li>1 כף פפריקה מתוקה</li>
+              <li>מלח</li>
+              <li>1.5 ליטר מים</li>
+              <li>250 גרם ספגטי דק (שבור) או אטריות דקות</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="section-label">הוראות הכנה</div>
+            <ul class="steps-list">
+              <li class="step"><span class="step-num">1.</span>מחממים שמן בסיר ומטגנים קלות את רסק העגבניות, העגבניה הקצוצה, הפלפל החריף והתבלינים לפתיחת טעמים.</li>
+              <li class="step"><span class="step-num">2.</span>מוסיפים מים ומביאים לרתיחה.</li>
+              <li class="step"><span class="step-num">3.</span>מוסיפים את הספגטי השבור או האטריות הדקות.</li>
+              <li class="step"><span class="step-num">4.</span>מבשלים כ-10 דקות עד שהפסטה רכה והמרק מסמיך מעט.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-num">3</div>
+    </div>
+  </section>
+
+
+  <!-- PAGE 4: ENGLISH (left) + ARABIC (right) -->
+  <section class="page">
+    <div class="page-inner">
+      <div class="corner-decorations">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/paprika_sweet_hot.png" 
+             alt="" 
+             style="left: 55.0%; top: 6.0%; transform: rotate(20deg) skewX(0deg) skewY(1deg) scale(0.9506609935758144);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/salt_table_coarse_kala_namak.png" 
+             alt="" 
+             style="left: 73.0%; top: 14.0%; transform: rotate(7deg) skewX(-6deg) skewY(-1deg) scale(0.9299953660758926);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/pasta_spaghetti_vermicelli.png" 
+             alt="" 
+             style="left: 88.0%; top: 4.0%; transform: rotate(10deg) skewX(-1deg) skewY(2deg) scale(1.0397111265850563);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/hot_peppers_chili.png" 
+             alt="" 
+             style="left: 4.0%; top: 72.0%; transform: rotate(-12deg) skewX(-3deg) skewY(-4deg) scale(1.1258457172794052);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/water.png" 
+             alt="" 
+             style="left: 20.0%; top: 82.0%; transform: rotate(-17deg) skewX(6deg) skewY(1deg) scale(1.0152747833521165);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/oil_vegetable_olive_canola.png" 
+             alt="" 
+             style="left: 8.0%; top: 92.0%; transform: rotate(-17deg) skewX(3deg) skewY(-3deg) scale(1.0125692194051785);">
+      </div>
+      <div class="two-col">
+        <div class="column lang-en" style="font-size: 0.746rem; line-height: 1.26;">
+          <div>
+            <div class="section-label">Ingredients</div>
+            <ul class="ingredients-list">
+              <li>2 tbsp oil</li>
+              <li>1 tbsp tomato paste</li>
+              <li>1 chopped tomato</li>
+              <li>1 hot pepper (to taste)</li>
+              <li>1 tbsp sweet paprika</li>
+              <li>Salt</li>
+              <li>1.5 liters water</li>
+              <li>250g thin spaghetti (broken) or vermicelli</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="section-label">Instructions</div>
+            <ul class="steps-list">
+              <li class="step"><span class="step-num">1.</span>Heat oil in a pot and sauté tomato paste, chopped tomato, hot pepper, and spices to release flavors.</li>
+              <li class="step"><span class="step-num">2.</span>Add water and bring to a boil.</li>
+              <li class="step"><span class="step-num">3.</span>Add the broken spaghetti or thin vermicelli.</li>
+              <li class="step"><span class="step-num">4.</span>Cook for about 10 minutes until the pasta is tender and the soup thickens slightly.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="column lang-ar" style="font-size: 0.754rem; line-height: 1.27;">
+          <div>
+            <div class="section-label">المكونات</div>
+            <ul class="ingredients-list">
+              <li>2 ملاعق زيت</li>
+              <li>1 ملعقة طماطم حكة (معجون)</li>
+              <li>1 كعبة طماطم مقطعة</li>
+              <li>1 فلفل حار (حسب الرغبة)</li>
+              <li>1 ملعقة فلفل أحمر حلو</li>
+              <li>ملح</li>
+              <li>1.5 لتر ماء</li>
+              <li>250 غرام سباغيتي (مكسرة) أو شعيرية (دويدة)</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="section-label">طريقة التحضير</div>
+            <ul class="steps-list">
+              <li class="step"><span class="step-num">1.</span>سخن الزيت في طنجرة وقلّي طماطم الحكة، الطماطم المقطعة، الفلفل الحار والتوابل باش تخرج نكهتهم.</li>
+              <li class="step"><span class="step-num">2.</span>زيد الماء وخليه يغلي.</li>
+              <li class="step"><span class="step-num">3.</span>ارمي السباغيتي (مكسرة) أو الشعيرية (الدويدة) في المرقة.</li>
+              <li class="step"><span class="step-num">4.</span>طيبها حوالي 10 دقايق لين تطيب العجينة وتخثار المرقة شوية.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-num">4</div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
