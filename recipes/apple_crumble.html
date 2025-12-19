@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Apple Crumble – Four-Language Recipe</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bona+Nova:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Heebo:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================
+   FOUR-LANGUAGE COOKBOOK STYLES
+   ============================================ */
+
+:root {
+  --bg-page: #faf6f1;
+  --bg-body: #e0dfda;
+  --ink: #222222;
+  --muted: #777777;
+  --accent: #d9925b;
+  --accent-soft: #f3d7b4;
+  --font-english: "Sora", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-spanish: "Fraunces", Georgia, serif;
+  --font-hebrew: "Heebo", system-ui, sans-serif;
+  --font-arabic: "Noto Naskh Arabic", system-ui, sans-serif;
+  --font-title: "Bona Nova", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+  background: var(--bg-body);
+  font-family: var(--font-english);
+  color: var(--ink);
+}
+
+/* ============================================
+   BOOK / PAGE STRUCTURE
+   ============================================ */
+
+.book {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.page {
+  position: relative;
+  width: 8in;
+  height: 8in;
+  background: var(--bg-page);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.24);
+  overflow: hidden;
+  page-break-after: always;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.page-inner {
+  padding: 0.4in 0.5in;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.page--image .page-inner {
+  padding: 0;
+}
+
+.page-num {
+  position: absolute;
+  bottom: 0.3in;
+  right: 0.35in;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================
+   RTL / LTR LANGUAGE HELPERS
+   ============================================ */
+
+.lang-he {
+  direction: rtl;
+  text-align: right;
+  font-family: var(--font-hebrew);
+}
+
+.lang-ar {
+  direction: rtl;
+  text-align: right;
+  font-family: var(--font-arabic);
+}
+
+.lang-es {
+  direction: ltr;
+  text-align: left;
+  font-family: var(--font-spanish);
+}
+
+.lang-en {
+  direction: ltr;
+  text-align: left;
+  font-family: var(--font-english);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+p {
+  margin: 0 0 0.35em;
+  line-height: 1.5;
+  font-size: 0.85rem;
+}
+
+h2 {
+  margin: 0 0 0.2in;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================
+   PAGE 1: TITLE + DESCRIPTION
+   ============================================ */
+
+/* Title block - flexbox layout with chapter number in center */
+.title-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.2in;
+  width: 100%;
+}
+
+/* Each title row - two titles side by side using flexbox */
+.title-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 0.1in;
+}
+
+/* Chapter number - compact circle between rows */
+.chapter-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.04in 0;
+}
+
+.chapter-number span {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--bg-page);
+  border-radius: 50%;
+  width: 0.5in;
+  height: 0.5in;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 1.5px var(--accent-soft);
+}
+
+.title-word {
+  font-family: var(--font-title);
+  font-size: 2.6rem;
+  font-weight: 700;
+  padding: 0.08in 0.1in;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  min-height: 0.65in;
+  position: relative;
+  background: transparent;
+  box-sizing: border-box;
+  flex: 1;
+  text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.6),
+               -1px -1px 0 rgba(0, 0, 0, 0.15),
+               3px 3px 12px rgba(217, 146, 91, 0.2);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))
+          brightness(1.02)
+          contrast(1.05)
+          saturate(1.1);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* LTR titles (Spanish, English) - align left */
+.title-word.lang-es,
+.title-word.lang-en {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* RTL titles (Hebrew, Arabic) - align right */
+.title-word.lang-he,
+.title-word.lang-ar {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.title-word::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, 
+              transparent 0%, 
+              rgba(255, 255, 255, 0.02) 50%, 
+              transparent 100%);
+  pointer-events: none;
+  opacity: 0.4;
+  border-radius: 50%;
+}
+
+.title-word::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: radial-gradient(ellipse at 30% 40%, 
+              rgba(217, 146, 91, 0.04) 0%, 
+              transparent 70%);
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  border-radius: 50%;
+}
+
+.title-word:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2))
+          brightness(1.05)
+          contrast(1.1)
+          saturate(1.15);
+}
+
+.title-word span {
+  color: var(--ink);
+  text-align: center;
+  width: 100%;
+  display: block;
+}
+
+.title-word.lang-he,
+.title-word.lang-ar {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.title-word.lang-es {
+  text-transform: capitalize;
+}
+
+/* ============================================
+   TITLE FONT SIZE TIERS
+   ============================================ */
+
+.title-word.title-large {
+  font-size: 2.8rem;
+}
+
+.title-word.title-medium {
+  font-size: 2.2rem;
+}
+
+.title-word.title-small {
+  font-size: 1.7rem;
+}
+
+/* ============================================
+   DESCRIPTION SECTION
+   ============================================ */
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15in;
+}
+
+.info-item {
+  text-align: center;
+  font-size: 0.85rem;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.info-item p {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.section {
+  margin-bottom: 0.45in;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.2in;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+/* ============================================
+   PAGE 2: FULL IMAGE
+   ============================================ */
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============================================
+   PAGE 3 + 4: TWO-COLUMN LAYOUT
+   Using absolute positioning for reliable print rendering
+   ============================================ */
+
+.two-col {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+/* LEFT COLUMN (LTR: Spanish/English) - starts 15% from top, wider outer margin */
+.two-col > .column:first-child {
+  position: absolute;
+  top: 15%;
+  left: 0;
+  width: 50%;
+  height: 85%;
+  box-sizing: border-box;
+  padding: 0 0.12in 0 0.35in;  /* 0.35in outer margin (left edge), 0.12in toward center */
+}
+
+/* RIGHT COLUMN (RTL: Hebrew/Arabic) - starts 38% from top to clear illustrations */
+.two-col > .column:nth-child(2) {
+  position: absolute;
+  top: 38%;
+  right: 0;
+  width: 50%;
+  height: 62%;
+  box-sizing: border-box;
+  padding: 0 0.35in 0 0.12in;  /* 0.35in outer margin (right edge), 0.12in toward center */
+}
+
+/* Vertical divider */
+.two-col::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 0.5px;
+  background-color: var(--accent-soft);
+  opacity: 0.5;
+  transform: translateX(-50%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ============================================
+   CORNER INGREDIENT DECORATIONS
+   ============================================ */
+
+.corner-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.corner-ingredient {
+  position: absolute;
+  width: 2.0in;
+  height: 2.0in;
+  object-fit: contain;
+  opacity: 0.35;
+  filter: saturate(0.75) brightness(1.05);
+  pointer-events: none;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08in;
+  overflow: hidden;
+  justify-content: flex-start;
+  align-items: stretch;
+  z-index: 1;
+}
+
+/* All columns get symmetric padding */
+
+.column > div {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  gap: 0.08in;
+}
+
+.section-label {
+  font-size: 0.7em;  /* Relative to parent's adaptive font-size */
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.03in;
+  text-align: center;
+}
+
+.ingredients-list,
+.steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  /* Font size and line-height now set via adaptive inline styles */
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.ingredients-list li + li {
+  margin-top: 0.03em;
+}
+
+.step {
+  margin-bottom: 0.1em;
+}
+
+.step-num {
+  font-weight: 600;
+  margin-right: 0.25em;
+}
+
+.lang-he .step-num,
+.lang-ar .step-num {
+  margin-right: 0;
+  margin-left: 0.25em;
+}
+
+.variant-label {
+  margin-top: 0.1in;
+  margin-bottom: 0.04in;
+  font-size: 0.9em;  /* Relative to parent's adaptive font-size */
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ============================================
+   COMPACT/TIGHT CLASSES FOR OVERFLOW
+   ============================================ */
+
+/* Compact/tight classes removed - using adaptive inline styles instead */
+
+/* ============================================
+   METADATA ROW
+   ============================================ */
+
+.meta-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 0.2in;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 0.3in;
+  align-items: center;
+}
+
+.meta-row.meta-footer {
+  position: absolute;
+  bottom: 0.4in;
+  left: 0.6in;
+  right: 0.6in;
+  margin-bottom: 0;
+  z-index: 10;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  text-align: center;
+}
+
+.meta-label {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.meta-value {
+  color: var(--ink);
+  margin-top: 0.04in;
+  text-align: center;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  body {
+    background: #ffffff;
+    padding: 0;
+  }
+
+  .book {
+    display: block;
+  }
+
+  .page {
+    box-shadow: none;
+    margin: 0;
+    page-break-after: always;
+    overflow: hidden;  /* Keep content within page bounds */
+  }
+
+  .title-word:hover {
+    transform: none;
+  }
+
+  @page {
+    size: 8in 8in;
+    margin: 0;
+  }
+
+  .two-col {
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .two-col > .column:first-child {
+    position: absolute;
+    left: 0;
+    width: 50%;
+  }
+
+  .two-col > .column:nth-child(2) {
+    position: absolute;
+    right: 0;
+    width: 50%;
+  }
+
+  .column {
+    overflow: hidden;
+  }
+}
+
+/* ============================================
+   FRONT MATTER PAGES
+   ============================================ */
+
+/* Title Page */
+.page--title {
+  background: var(--bg-page);
+  position: relative;
+}
+
+/* Ingredient Background Layer */
+.title-ingredients-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.title-ingredient {
+  position: absolute;
+  object-fit: contain;
+  opacity: 0.15;
+  filter: saturate(0.4) brightness(1.1);
+  pointer-events: none;
+}
+
+.title-page-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.title-page-content {
+  text-align: center;
+  padding: 0.4in;
+  width: 100%;
+}
+
+.book-titles {
+  margin-bottom: 0.3in;
+}
+
+.book-title-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5in;
+  margin-bottom: 0.1in;
+}
+
+.book-title {
+  font-family: var(--font-title);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.book-title-he {
+  font-family: var(--font-hebrew);
+  direction: rtl;
+}
+
+.book-title-ar {
+  font-family: var(--font-arabic);
+  direction: rtl;
+}
+
+.book-title-en,
+.book-title-es {
+  font-family: var(--font-title);
+  letter-spacing: 0.03em;
+}
+
+.book-subtitle-block {
+  margin-bottom: 0.15in;
+}
+
+.book-subtitle {
+  font-family: var(--font-english);
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-bottom: 0.04in;
+  letter-spacing: 0.05em;
+}
+
+.book-subtitle.book-subtitle-he {
+  font-family: var(--font-hebrew);
+  direction: rtl;
+}
+
+.book-subtitle.book-subtitle-ar {
+  font-family: var(--font-arabic);
+  direction: rtl;
+}
+
+.title-divider {
+  width: 2in;
+  height: 2px;
+  background: var(--accent);
+  margin: 0.25in auto;
+}
+
+.family-lines {
+  margin-bottom: 0.2in;
+}
+
+.family-line {
+  font-family: var(--font-english);
+  font-size: 0.95rem;
+  color: var(--ink);
+  margin-bottom: 0.03in;
+}
+
+.family-origin {
+  font-family: var(--font-english);
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+}
+
+.authors {
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+/* Copyright Page */
+.page--copyright {
+  background: var(--bg-page);
+}
+
+.copyright-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.copyright-content {
+  text-align: center;
+  width: 100%;
+}
+
+.copyright-text {
+  font-family: var(--font-english);
+  font-size: 0.85rem;
+  color: var(--ink);
+  margin-bottom: 0.1in;
+  text-align: center;
+}
+
+.copyright-edition {
+  font-size: 0.8rem;
+  margin-top: 0.15in;
+}
+
+.copyright-divider {
+  width: 1.5in;
+  height: 1px;
+  background: var(--accent-soft);
+  margin: 0.25in auto;
+}
+
+.copyright-note {
+  font-family: var(--font-english);
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 0.06in;
+  text-align: center;
+}
+
+.copyright-note-ar {
+  font-family: var(--font-arabic);
+  direction: rtl;
+}
+
+/* Introduction Page */
+.page--intro {
+  background: var(--bg-page);
+}
+
+.intro-inner {
+  padding: 0.4in 0.5in;
+}
+
+.intro-title {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 0.25in;
+  letter-spacing: 0.05em;
+}
+
+.intro-columns {
+  display: flex;
+  gap: 0.4in;
+  height: calc(100% - 0.8in);
+}
+
+.intro-col {
+  flex: 1;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.intro-col p {
+  margin-bottom: 0.12in;
+}
+
+.intro-col p:first-child {
+  margin-top: 0;
+}
+
+.intro-text-he {
+  font-family: var(--font-hebrew);
+  direction: rtl;
+  text-align: right;
+}
+
+.intro-text-en {
+  font-family: var(--font-english);
+  text-align: justify;
+}
+
+.intro-text-es {
+  font-family: var(--font-english);
+  text-align: justify;
+}
+
+.intro-text-ar {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  text-align: right;
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+/* Table of Contents */
+.page--toc {
+  background: var(--bg-page);
+}
+
+.toc-inner {
+  padding: 0.3in 0.4in;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.toc-title {
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.15in;
+  color: var(--color-title);
+  border-bottom: 1px solid var(--color-accent);
+  padding-bottom: 0.08in;
+}
+
+.toc-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.04in 0.2in;
+  page-break-inside: avoid;
+}
+
+.toc-list > .toc-item {
+  width: calc(50% - 0.15in);
+}
+
+.toc-item {
+  display: flex;
+  gap: 0.05in;
+  align-items: start;
+  font-size: 0.7rem;
+  line-height: 1.3;
+  padding: 0.02in 0;
+  border-bottom: 0.5px dotted var(--color-muted);
+  padding-bottom: 0.03in;
+}
+
+.toc-num {
+  font-family: var(--font-title);
+  font-weight: 600;
+  color: var(--color-accent);
+  text-align: right;
+  font-size: 0.72rem;
+}
+
+.toc-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.12in;
+}
+
+.toc-name {
+  color: var(--color-text);
+}
+
+.toc-name-en {
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+.toc-name-he {
+  font-family: var(--font-hebrew);
+  direction: rtl;
+  color: var(--color-muted);
+}
+
+.toc-name-es {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+.toc-name-ar {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  color: var(--color-muted);
+  font-size: 0.58rem;
+}
+
+/* Blank Page */
+.page--blank {
+  background: var(--bg-page);
+}
+
+/* ============================================
+   8.5x8.5 BLEED PRINT STYLES
+   For print version with spine margins
+   ============================================ */
+
+/* When printing in bleed mode (8.5x8.5), we need to adjust margins
+   for verso/recto (left/right) pages. The spine gets 0.5" extra padding,
+   and content is shifted to the top, leaving 0.5" extra at bottom. */
+
+/* Applied via body class in the bleed HTML */
+body.print-bleed .page {
+  width: 8in;
+  height: 8in;
+  /* Content stays 8x8, page positions it within 8.5x8.5 */
+}
+
+/* Bleed print media query - applies when printing 8.5x8.5 version */
+@media print {
+  body.print-bleed {
+    padding: 0;
+    margin: 0;
+    background: white;
+  }
+  
+  body.print-bleed .book {
+    display: block;
+  }
+  
+  body.print-bleed .page {
+    box-shadow: none;
+    margin: 0;
+  }
+}
+
+/* WeasyPrint-specific: The @page :left/:right rules for the bleed print version
+   are defined in the inline CSS block generated by get_bleed_css() in build.py */
+
+
+</style>
+</head>
+<body>
+
+<div class="book">
+
+  <!-- PAGE 1: NAME + DESCRIPTION (Chapter 72) -->
+  <section class="page">
+    <div class="page-inner">
+
+      <div class="title-block">
+        <div class="title-row">
+          <div class="title-word lang-es title-small"><span>Crumble de Manzana</span></div>
+          <div class="title-word lang-he title-small"><span>קראמבל תפוחים</span></div>
+        </div>
+        <div class="chapter-number"><span>72</span></div>
+        <div class="title-row">
+          <div class="title-word lang-en title-small"><span>Apple Crumble</span></div>
+          <div class="title-word lang-ar title-small"><span>كرامبل تفاح</span></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="info-grid">
+          <div class="info-item lang-he">
+            <p>קראמבל תפוחים משלב את המונח הקולינרי האנגלי עם המילה העברית לתפוחים. גרסה מודרנית זו לקלאסיקה הבריטית מימי המלחמה כוללת פירות מתובלים מתחת לציפוי שיבולת שועל פריך. השימוש בשומן צמחי במקום חמאה הופך את הקינוח לפרווה, סיום מושלם לכל ארוחה חגיגית.</p>
+          </div>
+          <div class="info-item lang-es">
+            <p>El Crumble Tapuchim combina el término culinario inglés con la palabra hebrea para manzanas. Esta adaptación moderna del clásico británico de tiempos de guerra presenta fruta especiada bajo una cobertura crujiente de avena. Al usar grasas vegetales en lugar de mantequilla, este postre se mantiene pareve y sirve como el final perfecto para cualquier comida festiva.</p>
+          </div>
+          <div class="info-item lang-ar">
+            <p>كرامبل تفاح يخلط الاسم الإنجليزي مع كلمة تفاح. هذي الوصفة العصرية أصلها بريطاني، فيها غلة مفوحة تحت طبقة مقرمشة متاع شوفان. استعملنا زبدة نباتية في عوض الزبدة العادية باش تكون بارف (pareve)، وهي تحلية ممتازة بعد أي وجبة احتفالية.</p>
+          </div>
+          <div class="info-item lang-en">
+            <p>Crumble Tapuchim combines the English culinary term with the Hebrew word for apples. This modern adaptation of the British wartime classic features spiced fruit under a crisp oat topping. By using plant-based fats instead of butter, this dessert remains pareve and serves as a perfect conclusion to any festive meal.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="meta-row meta-footer">
+        <div class="meta-item">
+          <span class="meta-label">Servings</span>
+          <span class="meta-value">6-8</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Prep time</span>
+          <span class="meta-value">20 min</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Cook time</span>
+          <span class="meta-value">60 min</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Difficulty</span>
+          <span class="meta-value">Easy</span>
+        </div>
+      </div>
+
+      <div class="page-num">1</div>
+    </div>
+  </section>
+
+
+  <!-- PAGE 2: FULL-BLEED IMAGE -->
+  <section class="page page--image">
+    <div class="page-inner">
+      <img class="hero-image" src="../images/003_apple_crumble.png" alt="Apple Crumble dish">
+      <div class="page-num">2</div>
+    </div>
+  </section>
+
+
+  <!-- PAGE 3: SPANISH (left) + HEBREW (right) -->
+  <section class="page">
+    <div class="page-inner">
+      <div class="corner-decorations">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/beans_white_brown_mixed.png" 
+             alt="" 
+             style="left: 55.0%; top: 6.0%; transform: rotate(11deg) skewX(1deg) skewY(2deg) scale(0.9837765753079635);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/almond_flour.png" 
+             alt="" 
+             style="left: 73.0%; top: 14.0%; transform: rotate(-2deg) skewX(0deg) skewY(-3deg) scale(0.8661034442316135);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/vegan_mayonnaise.png" 
+             alt="" 
+             style="left: 88.0%; top: 4.0%; transform: rotate(-11deg) skewX(-4deg) skewY(3deg) scale(1.1017554557291744);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/baking_soda.png" 
+             alt="" 
+             style="left: 4.0%; top: 72.0%; transform: rotate(13deg) skewX(3deg) skewY(-3deg) scale(1.02972567049845);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/sugar_white_brown_powdered_vanilla.png" 
+             alt="" 
+             style="left: 20.0%; top: 82.0%; transform: rotate(1deg) skewX(-3deg) skewY(0deg) scale(0.9733876319849102);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/cinnamon.png" 
+             alt="" 
+             style="left: 8.0%; top: 92.0%; transform: rotate(-16deg) skewX(5deg) skewY(0deg) scale(0.9275494323282347);">
+      </div>
+      <div class="two-col">
+        <div class="column lang-es" style="font-size: 0.680rem; line-height: 1.20;">
+          <div>
+            <div class="section-label">Ingredientes</div>
+            <ul class="ingredients-list">
+              <li>8 manzanas, peladas y cortadas en rodajas</li>
+              <li>150 g de azúcar regular (para el relleno)</li>
+              <li>1.3 g de canela</li>
+              <li>0.75 g de sal</li>
+              <li>45 g de avena</li>
+              <li>62.5 g de harina</li>
+              <li>100 g de azúcar morena (para la cobertura)</li>
+              <li>1.2 g de polvo de hornear</li>
+              <li>0.6 g de bicarbonato de sodio</li>
+              <li>42.6 g de mantequilla vegana o aceite de coco, fría y en cubos</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="section-label">Instrucciones</div>
+            <ul class="steps-list">
+              <li class="step"><span class="step-num">1.</span>Precalentar el horno a 180°C.</li>
+              <li class="step"><span class="step-num">2.</span>En un bol, mezclar las manzanas cortadas, el azúcar regular, la canela y la sal.</li>
+              <li class="step"><span class="step-num">3.</span>Transferir la mezcla de manzana a un molde para hornear mediano engrasado.</li>
+              <li class="step"><span class="step-num">4.</span>En un bol aparte, mezclar la avena, la harina, el azúcar morena, el polvo de hornear y el bicarbonato.</li>
+              <li class="step"><span class="step-num">5.</span>Añadir la margarina fría a los ingredientes secos y mezclar bien (con los dedos o un tenedor) hasta obtener una textura grumosa.</li>
+              <li class="step"><span class="step-num">6.</span>Verter la mezcla de crumble uniformemente sobre las manzanas.</li>
+              <li class="step"><span class="step-num">7.</span>Hornear durante 50-60 minutos hasta que las manzanas estén blandas y la cobertura dorada.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="column lang-he" style="font-size: 0.680rem; line-height: 1.20;">
+          <div>
+            <div class="section-label">מצרכים</div>
+            <ul class="ingredients-list">
+              <li>8 תפוחים, קלופים ופרוסים</li>
+              <li>150 גרם סוכר לבן (למילוי)</li>
+              <li>1.3 גרם קינמון</li>
+              <li>0.75 גרם מלח</li>
+              <li>45 גרם שיבולת שועל (קוואקר)</li>
+              <li>62.5 גרם קמח</li>
+              <li>100 גרם סוכר חום (לציפוי)</li>
+              <li>1.2 גרם אבקת אפייה</li>
+              <li>0.6 גרם סודה לשתייה</li>
+              <li>42.6 גרם חמאה טבעונית או שמן קוקוס, קרה וחתוכה לקוביות</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="section-label">הוראות הכנה</div>
+            <ul class="steps-list">
+              <li class="step"><span class="step-num">1.</span>מחממים תנור ל-180 מעלות.</li>
+              <li class="step"><span class="step-num">2.</span>בקערה, מערבבים את התפוחים הפרוסים, הסוכר הלבן, הקינמון והמלח.</li>
+              <li class="step"><span class="step-num">3.</span>מעבירים את תערובת התפוחים לתבנית אפייה בינונית משומנת.</li>
+              <li class="step"><span class="step-num">4.</span>בקערה נפרדת, מערבבים את שיבולת השועל, הקמח, הסוכר החום, אבקת האפייה והסודה לשתייה.</li>
+              <li class="step"><span class="step-num">5.</span>מוסיפים את המרגרינה הקרה לחומרים היבשים ומערבבים היטב (בעזרת האצבעות או מזלג) עד לקבלת מרקם פירורי.</li>
+              <li class="step"><span class="step-num">6.</span>מפזרים את תערובת הקראמבל באופן שווה מעל התפוחים.</li>
+              <li class="step"><span class="step-num">7.</span>אופים במשך 50-60 דקות עד שהתפוחים רכים והציפוי שחום.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-num">3</div>
+    </div>
+  </section>
+
+
+  <!-- PAGE 4: ENGLISH (left) + ARABIC (right) -->
+  <section class="page">
+    <div class="page-inner">
+      <div class="corner-decorations">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/beans_white_brown_mixed.png" 
+             alt="" 
+             style="left: 55.0%; top: 6.0%; transform: rotate(11deg) skewX(1deg) skewY(2deg) scale(0.9837765753079635);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/almond_flour.png" 
+             alt="" 
+             style="left: 73.0%; top: 14.0%; transform: rotate(-2deg) skewX(0deg) skewY(-3deg) scale(0.8661034442316135);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/vegan_mayonnaise.png" 
+             alt="" 
+             style="left: 88.0%; top: 4.0%; transform: rotate(-11deg) skewX(-4deg) skewY(3deg) scale(1.1017554557291744);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/baking_soda.png" 
+             alt="" 
+             style="left: 4.0%; top: 72.0%; transform: rotate(13deg) skewX(3deg) skewY(-3deg) scale(1.02972567049845);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/sugar_white_brown_powdered_vanilla.png" 
+             alt="" 
+             style="left: 20.0%; top: 82.0%; transform: rotate(1deg) skewX(-3deg) skewY(0deg) scale(0.9733876319849102);">
+        <img class="corner-ingredient" 
+             src="../images/ingredients/cinnamon.png" 
+             alt="" 
+             style="left: 8.0%; top: 92.0%; transform: rotate(-16deg) skewX(5deg) skewY(0deg) scale(0.9275494323282347);">
+      </div>
+      <div class="two-col">
+        <div class="column lang-en" style="font-size: 0.680rem; line-height: 1.20;">
+          <div>
+            <div class="section-label">Ingredients</div>
+            <ul class="ingredients-list">
+              <li>8 apples, peeled and sliced</li>
+              <li>3/4 cup regular sugar (for filling)</li>
+              <li>1/2 tsp cinnamon</li>
+              <li>1/8 tsp salt</li>
+              <li>1/2 cup oatmeal (rolled oats)</li>
+              <li>1/2 cup flour</li>
+              <li>1/2 cup brown sugar (for topping)</li>
+              <li>1/4 tsp baking powder</li>
+              <li>1/8 tsp baking soda</li>
+              <li>3 tbsp vegan butter or coconut oil, cold and cubed</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="section-label">Instructions</div>
+            <ul class="steps-list">
+              <li class="step"><span class="step-num">1.</span>Preheat the oven to 180°C (350°F).</li>
+              <li class="step"><span class="step-num">2.</span>In a bowl, mix together the sliced apples, regular sugar, cinnamon, and salt.</li>
+              <li class="step"><span class="step-num">3.</span>Transfer the apple mixture into a greased medium-sized baking pan.</li>
+              <li class="step"><span class="step-num">4.</span>In a separate bowl, mix the oatmeal, flour, brown sugar, baking powder, and baking soda.</li>
+              <li class="step"><span class="step-num">5.</span>Add the cold margarine to the dry ingredients and mix well (using fingers or a fork) until a crumbly texture is achieved.</li>
+              <li class="step"><span class="step-num">6.</span>Pour the crumble mixture evenly over the apples.</li>
+              <li class="step"><span class="step-num">7.</span>Bake for 50-60 minutes until the apples are soft and the topping is browned.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="column lang-ar" style="font-size: 0.680rem; line-height: 1.20;">
+          <div>
+            <div class="section-label">المكونات</div>
+            <ul class="ingredients-list">
+              <li>8 تفاحات، مقشرين ومقصوصين</li>
+              <li>3/4 كاس سكر (للحشو)</li>
+              <li>1/2 مغرفة صغيرة قرفة</li>
+              <li>1/8 مغرفة صغيرة ملح</li>
+              <li>1/2 كاس شوفان</li>
+              <li>1/2 كاس فرينة</li>
+              <li>1/2 كاس سكر أسمر (للفوق)</li>
+              <li>1/4 مغرفة صغيرة خميرة</li>
+              <li>1/8 مغرفة صغيرة بيكربونات</li>
+              <li>3 مغارف زبدة نباتية أو زيت جوز الهند، باردة ومكعبات</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="section-label">طريقة التحضير</div>
+            <ul class="steps-list">
+              <li class="step"><span class="step-num">1.</span>نسخنوا الفور لـ 180 درجة.</li>
+              <li class="step"><span class="step-num">2.</span>في صحفة، نخلطوا التفاح المقصوص، السكر، القرفة والملح.</li>
+              <li class="step"><span class="step-num">3.</span>نحطوا خليط التفاح في طبق فور متوسط مدهون بالزيت.</li>
+              <li class="step"><span class="step-num">4.</span>في صحفة أخرى، نخلطوا الشوفان، الفرينة، السكر الأسمر، الخميرة والبيكربونات.</li>
+              <li class="step"><span class="step-num">5.</span>نزيدوا الزبدة الباردة للمكونات الشايحة ونخلطوا مليح (بصوابعنا ولا بفرشيطة) لين تولي مفترشة.</li>
+              <li class="step"><span class="step-num">6.</span>نصبوا خليط الكرامبل بالتساوي فوق التفاح.</li>
+              <li class="step"><span class="step-num">7.</span>نطيبوها في الفور مدة 50-60 دقيقة لين يطيب التفاح ويحمار الوجه.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-num">4</div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
